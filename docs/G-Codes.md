@@ -754,7 +754,16 @@ GCode file:
 - `O1`...`O32`: These codes are read from the GCode stream and processed
   by this module and passed to the Palette 2 device.
 
-The following additional commands are also available.
+The following command is available when the
+[dual_carriage config section](Config_Reference.md#dual_carriage) is
+enabled:
+- `SET_DUAL_CARRIAGE CARRIAGE=[0|1]`: This command will set the active
+  carriage. It is typically invoked from the activate_gcode and
+  deactivate_gcode fields in a multiple extruder configuration.
+- `SET_DUAL_CARRIAGE_MODE MODE=[FULL_CONTROL|DUPLICATION|MIRRORED]`: This
+  command will set the active dual_carriage mode. The user must position the
+  CARRIAGE_1 before activate the DUPLICATION mode. This commande is available
+  for hybrid_corexy and hybrid_corexz robots.
 
 #### PALETTE_CONNECT
 `PALETTE_CONNECT`: This command initializes the connection with the
