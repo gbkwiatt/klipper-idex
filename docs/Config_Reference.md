@@ -2524,14 +2524,25 @@ information.
 #sensor_type:
 #sensor_pin:
 #control:
-#pid_Kp:
-#pid_Ki:
-#pid_Kd:
-#pid_deriv_time:
 #max_delta:
 #min_temp:
 #max_temp:
 #   See the "extruder" section for a description of the above parameters.
+#pid_Kp:
+#pid_Ki:
+#pid_Kd:
+#   The proportional (pid_Kp), integral (pid_Ki), and derivative
+#   (pid_Kd) settings for the PID feedback control system. Klipper
+#   evaluates the PID settings with the following general formula:
+#     fan_pwm = max_power - (Kp*e + Ki*integral(e) - Kd*derivative(e)) / 255
+#   Where "e" is "target_temperature - measured_temperature" and
+#   "fan_pwm" is the requested fan rate with 0.0 being full off and
+#   1.0 being full on. The pid_Kp, pid_Ki, and pid_Kd parameters must
+#   be provided when the PID control algorithm is enabled.
+#pid_deriv_time: 2.0
+#   A time value (in seconds) over which temperature measurements will
+#   be smoothed when using the PID control algorithm. This may reduce
+#   the impact of measurement noise. The default is 2 seconds.
 #target_temp: 40.0
 #   A temperature (in Celsius) that will be the target temperature.
 #   The default is 40 degrees.
@@ -2609,7 +2620,10 @@ sections with a "neopixel" prefix). See the
 [command reference](G-Codes.md#led) for more information.
 
 Note that the [linux mcu](RPi_microcontroller.md) implementation does
-not currently support directly connected neopixels.
+not currently support directly connected neopixels. The current design
+using the Linux kernel interface does not allow this scenario because
+the kernel GPIO interface is not fast enough to provide the required
+pulse rates.
 
 ```
 [neopixel my_neopixel]
