@@ -93,13 +93,17 @@ config MACH_STM32F4x5 # F405, F407, F429 series
     bool
 config HAVE_STM32_USBFS
     bool
-    default y if MACH_STM32F103 || MACH_STM32F0x2 || MACH_STM32F070 || MACH_STM32G0
+    default y if MACH_STM32F0x2 || MACH_STM32G0
+    default y if (MACH_STM32F103 || MACH_STM32F070) && !STM32_CLOCK_REF_INTERNAL
 config HAVE_STM32_USBOTG
     bool
     default y if MACH_STM32F2 || MACH_STM32F4 || MACH_STM32H7
 config HAVE_STM32_CANBUS
     bool
     default y if MACH_STM32F1 || MACH_STM32F2 || MACH_STM32F4x5 || MACH_STM32F446 || MACH_STM32F0x2
+config HAVE_STM32_FDCANBUS
+    bool
+    default y if MACH_STM32G0
 
 config MCU
     string
@@ -341,10 +345,10 @@ choice
         bool "CAN bus (on PD0/PD1)" if LOW_LEVEL_OPTIONS
         depends on HAVE_STM32_CANBUS
         select CANSERIAL
+    config STM32_CANBUS_PB0_PB1
+        bool "CAN bus (on PB0/PB1)"
+        depends on HAVE_STM32_FDCANBUS
+        select CANSERIAL
 endchoice
-
-config CANBUS_FREQUENCY
-    int "CAN bus speed" if LOW_LEVEL_OPTIONS && CANSERIAL
-    default 500000
 
 endif
